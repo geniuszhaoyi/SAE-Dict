@@ -24,8 +24,8 @@ $(document).ready(function(){
     $("#submit").click(function(){
         user=$("#user").val();
         $.get("servlet/login.php?user="+user,function(data,status){
-            alert(data+'\n'+$.trim(data))
-            if($.trim(data)=="success" && status=='success'){
+            alert(($.trim(data)).substr(0,6))
+            if(($.trim(data)).substr(0,6)=="success" && status=='success'){
                 alert("Login Secceed! ")
                 $.cookie('dict-user', user, { expires: 30 });
                 //self.location="recite.html?user="+$("#user").val()
