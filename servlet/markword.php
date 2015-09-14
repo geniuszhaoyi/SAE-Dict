@@ -1,9 +1,9 @@
 <?php
 header("Content-Type: text/html; charset=UTF-8");
 
-$database='myDict';
+$database=SAE_MYSQL_DB;
 $intervalSecs=60;
-$conn=mysql_connect("localhost", "root", "zy19930108");
+$conn=mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
 mysql_query("set character set 'utf8'");
 mysql_query("set names set 'utf8'");
 
