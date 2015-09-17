@@ -15,7 +15,7 @@
 </style>
 <link rel="stylesheet" href="css/main.css" type="text/css" />
 <link rel="stylesheet" href="css/link-dotted.css" type="text/css" />
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.1.min.js"></script>
 <script type="text/javascript" src="jquery/jquery-cookie/jquery.cookie.js"></script>
 <script type="text/javascript" src="javascript/WMfunctions.jsp"></script>
 <script>
@@ -24,7 +24,7 @@ $(document).ready(function(){
     $("#submit").click(function(){
         user=$("#user").val();
         $.get("servlet/login.php?user="+user,function(data,status){
-            if(($.trim(data)).substr(0,7)=="success" && status=='success'){
+            if($.trim(data)=="success" && status=='success'){
                 alert("Login Secceed! ")
                 $.cookie('dict-user', user, { expires: 30 });
                 //self.location="recite.html?user="+$("#user").val()
