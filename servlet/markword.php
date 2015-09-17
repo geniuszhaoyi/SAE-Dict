@@ -14,7 +14,7 @@ if(!isset($_GET["user"])){
 if(isset($_GET["user"]) && isset($_GET["word"]) && isset($_GET["status"])){
     $result=mysql_db_query($database, "lock table RecitingWord write;", $conn);
     $result=mysql_db_query($database, "SELECT `word`,`status` FROM `RecitingWord` WHERE user='".$_GET["user"]."' AND word='".$_GET["word"]."'; ", $conn);
-    $status=intval(mysql_fetch_array($result)['status']);
+    $status=intval(mysql_fetch_array($result));
     
     if($_GET["status"]=="0") $status=$status+1;
     if($_GET["status"]=="1") if($status<5) $status=$status+1; else $status=$status;
