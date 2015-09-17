@@ -9,22 +9,23 @@ $database=SAE_MYSQL_DB;
 $conn=mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
 mysql_query("set character set 'utf8'");
 mysql_query("set names set 'utf8'");
+mysql_select_db(SAE_MYSQL_DB,$conn);
 
 if(isset($_GET["user"])){
-    $result=mysql_db_query($database, "SELECT `lastLogin`,`newwordSize` FROM User WHERE `user`='".$_GET["user"]."'; ", $conn);
+    $result=mysql_query("SELECT `lastLogin`,`newwordSize` FROM User WHERE `user`='".$_GET["user"]."'; ", $conn);
     $oneuser=mysql_fetch_array($result);
     if($oneuser){
         if(CURDATE()!=$oneuser[0]){
             $listmax=intval($oneuser[1]);
-            mysql_db_query($database, "UPDATE User SET `lastLogin`='".CURDATE()."' WHERE `user`='".$_GET["user"]."'; ", $conn);
+            mysql_query("UPDATE User SET `lastLogin`='".CURDATE()."' WHERE `user`='".$_GET["user"]."'; ", $conn);
             $sql="SELECT `word` FROM `WordBase` WHERE source='GRE3000' AND 
                 NOT EXISTS (SELECT `word` FROM `RecitingWord` WHERE `RecitingWord`.user='".$_GET["user"]."' and `WordBase`.word=`RecitingWord`.word)
                 ORDER BY  `WordBase`.`word` ASC LIMIT 0,".$listmax."; ";
-            $result=mysql_db_query($database, $sql, $conn);
+            $result=mysql_query($sql, $conn);
             for($i=0;$i<$listmax;$i+=1){
                 $one=mysql_fetch_array($result);
                 if($one){
-                    mysql_db_query($database, "INSERT INTO `RecitingWord` (`word`,`user`) VALUES ('".$one[0]."','".$_GET["user"]."'); ", $conn);
+                    mysql_query("INSERT INTO `RecitingWord` (`word`,`user`) VALUES ('".$one[0]."','".$_GET["user"]."'); ", $conn);
                 }else{
                     break;
                 }

@@ -1,19 +1,19 @@
 <?php
 header("Content-Type: text/html; charset=UTF-8");
 
-$database=SAE_MYSQL_DB;
 $intervalSecs=60;
 $conn=mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
 mysql_query("set character set 'utf8'");
 mysql_query("set names set 'utf8'");
+mysql_select_db(SAE_MYSQL_DB,$conn);
 
 if(!isset($_GET["user"])){
     die('no user error');
 }
 
 if(isset($_GET["user"]) && isset($_GET["word"]) && isset($_GET["status"])){
-    $result=mysql_db_query($database, "lock table RecitingWord write;", $conn);
-    $result=mysql_db_query($database, "SELECT `word`,`status` FROM `RecitingWord` WHERE user='".$_GET["user"]."' AND word='".$_GET["word"]."'; ", $conn);
+    $result=mysql_query("lock table RecitingWord write;", $conn);
+    $result=mysql_query("SELECT `word`,`status` FROM `RecitingWord` WHERE user='".$_GET["user"]."' AND word='".$_GET["word"]."'; ", $conn);
     $status=intval(mysql_fetch_array($result));
     
     if($_GET["status"]=="0") $status=$status+1;
@@ -24,12 +24,12 @@ if(isset($_GET["user"]) && isset($_GET["word"]) && isset($_GET["status"])){
     $minstatus=-1;
     if($status<$minstatus) $status=$minstatus;
     
-    $result=mysql_db_query($database, "UPDATE `RecitingWord` SET `status`='".$status."',`lastRecite`='".date('Y-m-d H:i:s',time())."' WHERE user='".$_GET["user"]."' AND word='".$_GET["word"]."'; ", $conn);
-    $result=mysql_db_query($database, "unlock tables;", $conn);
+    $result=mysql_query("UPDATE `RecitingWord` SET `status`='".$status."',`lastRecite`='".date('Y-m-d H:i:s',time())."' WHERE user='".$_GET["user"]."' AND word='".$_GET["word"]."'; ", $conn);
+    $result=mysql_query("unlock tables;", $conn);
 }
 
 
-$result=mysql_db_query($database, "
+$result=mysql_query("
 SELECT `word`,`status`,`lastRecite` FROM `RecitingWord` 
 WHERE status<10 and DATE_ADD(`lastRecite`, INTERVAL power(`status`,4) MINUTE)<now() and user='".$_GET["user"]."' 
 ORDER BY `RecitingWord`.`RWID` ASC; ", $conn);
@@ -42,7 +42,7 @@ if(count($array)==0){
 }else{
     $i=0;
     //$i=rand(0,count($array)-1);
-    $result=mysql_db_query($database, "SELECT `word`,`desc` FROM `WordBase` WHERE word='".$array[$i][0]."'; ", $conn);
+    $result=mysql_query("SELECT `word`,`desc` FROM `WordBase` WHERE word='".$array[$i][0]."'; ", $conn);
     $one=mysql_fetch_array($result);
     $word=$one[0];
     $desc=$one[1];
